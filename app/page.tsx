@@ -40,6 +40,22 @@ export default function YallaMotorClone() {
   const [adWidth, setAdWidth] = useState(320); // Default width
   const [adLeft, setAdLeft] = useState(0); // Ad left position
 
+
+  
+const [marginRight, setMarginRight] = useState("0");
+
+useEffect(() => {
+  const handleResize = () => {
+    const isLargeScreen = window.innerWidth >= 1024; // Tailwind's 'lg' breakpoint
+    setMarginRight(showAd && isLargeScreen ? `${adWidth + 16}px` : "0");
+  };
+
+  window.addEventListener("resize", handleResize);
+  handleResize(); // Run once
+
+  return () => window.removeEventListener("resize", handleResize);
+}, [showAd, adWidth]);
+
   useEffect(() => {
     const handleScroll = () => {
       const createAlertElement = document.querySelector("[data-create-alert]")as HTMLElement | null;
@@ -50,7 +66,7 @@ export default function YallaMotorClone() {
       if (!createAlertElement || !popularBrandsElement) return;
 
       // Get the width and position of create alert element
-      const alertWidth = 310;
+      const alertWidth =  createAlertElement.offsetWidth;
       const alertLeft = createAlertElement.offsetLeft;
 
       setAdWidth(alertWidth);
@@ -384,7 +400,7 @@ export default function YallaMotorClone() {
           </div>
 
           {/* Car Details */}
-          <div className="flex-1 p-4 sm:p-6 bg-white">
+          <div className="flex-1 p-4 sm:p-6 bg-white ">
             <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
@@ -486,8 +502,8 @@ export default function YallaMotorClone() {
                 variant="secondary"
                 className={`text-sm ${
                   badge === "Urgent"
-                    ? "bg-[#F0F0F0] text-black"
-                    : "bg-[#497285] text-white"
+                    ? "bg-[#F0F0F0] text-black hover:bg-[#F0F0F0]"
+                    : "bg-[#497285] text-white hover:bg-[#497285]"
                 } rounded-sm`}
               >
                 {badge}
@@ -810,8 +826,8 @@ export default function YallaMotorClone() {
 
         {/* Main Content Container - Width constrained and with right margin for ad */}
         <div
-          className="md:max-w-6xl w-full"
-          style={{ marginRight: showAd ? `${adWidth + 16}px` : "0" }}
+          className="max-w-6xl "
+          style={{ marginRight }}
         >
           {/* First 3 Car Listings */}
           <div className="mb-8">
